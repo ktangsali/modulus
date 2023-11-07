@@ -34,8 +34,8 @@ def test_sfno_forward(device, checkpointing, pytestconfig):
     from modulus.models.sfno.sfnonet import SphericalFourierNeuralOperatorNet
 
     in_chans = 2
-    h, w = 8, 16
-    params = {}
+    h, w = 721, 1440
+    #params = {}
 
     fix_random_seeds()
     x = torch.randn(1, in_chans, h, w)
@@ -43,7 +43,9 @@ def test_sfno_forward(device, checkpointing, pytestconfig):
 
     # Construct sfno model
     model = SphericalFourierNeuralOperatorNet(
-        params,
+        #params,
+        spectral_transform="sht",
+        operator_type="diagonal",
         inp_shape=(h, w),
         scale_factor=4,
         in_chans=in_chans,
@@ -123,12 +125,12 @@ def test_sfno_constructor(
     from modulus.models.sfno.sfnonet import SphericalFourierNeuralOperatorNet
 
     in_chans = 2
-    h, w = 8, 16
+    h, w = 721, 1440
     batch_size = 2
 
     arg_list = [
         {
-            "params": {},
+            "spectral_trasform": "sht",
             "inp_shape": (h, w),
             "scale_factor": 4,
             "in_chans": in_chans,
@@ -150,7 +152,7 @@ def test_sfno_constructor(
             "complex_network": complex_network,
         },
         {
-            "params": {},
+            "spectral_trasform": "sht",
             "inp_shape": (h, w),
             "scale_factor": 4,
             "in_chans": in_chans,
@@ -195,13 +197,14 @@ def test_sfno_optims(device, pytestconfig):
         """Set up fresh model and inputs for each optim test"""
 
         in_chans = 2
-        h, w = 8, 16
+        h, w = 721, 1440
         fix_random_seeds()
         x = torch.randn(1, in_chans, h, w)
         x = x.to(device)
 
         model_kwds = {
-            "params": {},
+            "spectral_trasform": "sht",
+            "operator_type": "diagonal",
             "inp_shape": (h, w),
             "scale_factor": 4,
             "in_chans": in_chans,
@@ -239,14 +242,15 @@ def test_sfno_checkpoint(device, pytestconfig):
 
     from modulus.models.sfno.sfnonet import SphericalFourierNeuralOperatorNet
 
-    in_chans = 4
-    h, w = 8, 16
+    in_chans = 2
+    h, w = 721, 1440
     fix_random_seeds()
     x = torch.randn(1, in_chans, h, w)
     x = x.to(device)
 
     model_kwds = {
-        "params": {},
+        "spectral_trasform": "sht",
+        "operator_type": "diagonal",
         "inp_shape": (h, w),
         "scale_factor": 3,
         "in_chans": in_chans,
@@ -281,13 +285,14 @@ def test_sfno_deploy(device, pytestconfig):
     from modulus.models.sfno.sfnonet import SphericalFourierNeuralOperatorNet
 
     in_chans = 3
-    h, w = 8, 16
+    h, w = 721, 1440
     fix_random_seeds()
     x = torch.randn(1, in_chans, h, w)
     x = x.to(device)
 
     model_kwds = {
-        "params": {},
+        "spectral_trasform": "sht",
+        "operator_type": "diagonal",
         "inp_shape": (h, w),
         "scale_factor": 3,
         "in_chans": in_chans,

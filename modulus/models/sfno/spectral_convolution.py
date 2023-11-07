@@ -386,7 +386,7 @@ class SpectralAttention(nn.Module):
         self.spectral_layers = spectral_layers
 
         scale = (2 / in_channels) ** 0.5
-
+        self.scale = scale
         self.modes_lat = forward_transform.lmax
         self.modes_lon = forward_transform.mmax
 
@@ -406,8 +406,8 @@ class SpectralAttention(nn.Module):
             raise AssertionError
 
         hidden_size = int(hidden_size_factor * self.in_channels)
-
-        if operator_type == "diagonal":
+        
+        if self.operator_type == "diagonal":
             self.mul_add_handle = compl_muladd2d_fwd
             self.mul_handle = compl_mul2d_fwd
 
@@ -443,7 +443,7 @@ class SpectralAttention(nn.Module):
                     )
                 )
 
-        elif operator_type == "l-dependant":
+        elif self.operator_type == "l-dependant":
             self.mul_add_handle = compl_exp_muladd2d_fwd
             self.mul_handle = compl_exp_mul2d_fwd
 
